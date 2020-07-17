@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  etebariac:
+    network_mode: host
+    build:
+      context: .
+    environment:
+      TF_IN_AUTOMATION: ${TF_IN_AUTOMATION}
+      ARM_CLIENT_ID:
+      ARM_CLIENT_SECRET:
+      ARM_TENANT_ID:
+      ARM_SUBSCRIPTION_ID:
+    volumes:
+      - .:/workspace
+    logging:
+      driver: "json-file"
+    entrypoint: "/bin/sh -c"
+    command: "bin/plan"

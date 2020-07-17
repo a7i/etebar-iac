@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+
+check_env() {
+  if [ -z "$1" ]; then
+    echo "Environment variable $2 is required" >&2
+    exit 1
+  fi
+}
+
+check_env "$ARM_CLIENT_ID" ARM_CLIENT_ID
+check_env "$ARM_CLIENT_SECRET" ARM_CLIENT_SECRET
+check_env "$ARM_TENANT_ID" ARM_TENANT_ID
+check_env "$ARM_SUBSCRIPTION_ID" ARM_SUBSCRIPTION_ID
+
+terraform init -no-color -backend=true \
+    -backend-config config/backend.tf
+
+echo; echo; echo "Building deployment plan"; echo; echo;
+
+terraform plan -no-color -var-file="config/config.tfvars" -out=tfplan
+
+echo; echo; echo "Successfully created plan"; echo; echo;
